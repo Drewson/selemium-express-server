@@ -25,6 +25,7 @@ app.post('/follow', (req,res) => {
   client.api.login();
 
   let count = 0;
+  console.log(following.length);
 
   //LOOPS THROUGH LIST OF USERS TO FOLLOW
   var followLoop = function(x) {
@@ -38,14 +39,20 @@ app.post('/follow', (req,res) => {
       } else if(following[x]){
           if(following[x].toString().length < 15){
               client.api.follow(following[x])
-              console.log(`Following ${followimg[x]}`)
+                .then(res => {
+                  console.log(`Following ${following[x]}`)
+                })
+                .catch(err => {
+                  console.log(err)
+                })
+              
               followLoop(x + 1)
           }
       }
   }
 
   followLoop(0);
-  
+
   setTimeout(() => {
     unfollowLoop(0)
   }, 20000)
@@ -55,7 +62,11 @@ app.post('/follow', (req,res) => {
       if (following[x]) {
           setTimeout(function(){
               client.api.unfollow(following[x])
-              console.log(`Unfollowing ${followimg[x]}`)
+                .then(res => {
+                  console.log(`Unfollowing ${following[x]}`)
+                })
+                .catch(err => console.log(err))
+                
               unfollowLoop(x + 1)
           }, Math.random() * 15000);
       }
