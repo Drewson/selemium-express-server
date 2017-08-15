@@ -54,8 +54,10 @@ app.post('/follow', (req,res) => {
   followLoop(0);
 
   setTimeout(() => {
+    client.api.logout();
+    client.api.login();
     unfollowLoop(0)
-  }, 20000)
+  }, duration)
 
   //GRADUALLY UNFOLLOWS TO LOOK HUMAN
   var unfollowLoop = function(x) {
